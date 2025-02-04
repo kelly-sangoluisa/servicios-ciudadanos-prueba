@@ -1,0 +1,46 @@
+<!-- Formulario para comentar -->
+<form action="{% url 'comentar' noticia.id %}" method="post" class="mt-4">
+    {% csrf_token %}
+    <label for="comentario_texto" class="block text-gray-700 font-medium">Comentario:</label>
+    <textarea name="comentario_texto" id="comentario_texto" rows="3"
+              class="w-full p-2 mt-2 border border-gray-300 rounded-lg"></textarea>
+    <button type="submit"
+            class="mt-2 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+        Comentar
+    </button>
+</form>
+
+<!-- Mostrar comentarios -->
+<h3 class="text-xl font-semibold mt-6 mb-3">Comentarios:</h3>
+<ul id="comentarios_{{ noticia.id }}" class="space-y-4">
+    {% for comentario in noticia.comentarios.all %}
+    <li class="hidden bg-gray-100 p-3 rounded-md">
+        <p class="font-bold text-gray-800">{{ comentario.ciudadano.nombre_completo }}:</p>
+        <p class="text-sm text-gray-500">{{ comentario.fecha }}</p>
+        <p class="text-gray-700">{{ comentario.contenido }}</p>
+    </li>
+    {% endfor %}
+</ul>
+<div class="mt-4">
+    <button type="button" onclick="mostrarComentario({{ noticia.id }})"
+            class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300">
+        Ver Comentario
+    </button>
+</div>
+
+<script>
+    // Definir la función en el ámbito global
+    function mostrarComentario(noticiaId) {
+        // Obtener el contenedor de comentarios de la noticia específica
+        const contenedorComentarios = document.getElementById(`comentarios_${noticiaId}`);
+        const comentarios = contenedorComentarios.getElementsByTagName('li');
+
+        // Iterar sobre los comentarios y mostrar el primero que esté oculto
+        for (let i = 0; i < comentarios.length; i++) {
+            if (comentarios[i].classList.contains('hidden')) {
+                comentarios[i].classList.remove('hidden');
+                break; // Salir del bucle después de mostrar un comentario
+            }
+        }
+    }
+</script>

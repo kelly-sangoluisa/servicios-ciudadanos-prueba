@@ -65,3 +65,5 @@ class ServicioDeReporte():
         if not reporte.validar_reporte():
             raise ValueError("El reporte no es válido.")
         self.reporte_repositorio.agregar_reporte(reporte)
+        
+        return reporte

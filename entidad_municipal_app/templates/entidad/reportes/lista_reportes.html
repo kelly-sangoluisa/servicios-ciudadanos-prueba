@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="bg-white shadow rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+            <i class="fas fa-file-alt mr-2"></i>
+            Reportes Municipales {% if departamento_seleccionado %} - {{ departamento_seleccionado }} {% endif %}
+        </h1>
+
+        <!-- Formulario de filtro por departamento -->
+        <form method="get" class="w-64 mb-4">
+            <select name="departamento"
+                    class="block w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onchange="this.form.submit()">
+                <option value="">Todos los departamentos</option>
+                {% for departamento in departamentos %}
+                    <option value="{{ departamento.nombre }}"
+                            {% if departamento.nombre == departamento_seleccionado %}selected{% endif %}>
+                        {{ departamento.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+
+        <!-- Tabla de reportes -->
+        <div class="overflow-x-auto rounded-lg shadow-md">
+            <table class="min-w-full bg-white border border-gray-200">
+                <thead class="bg-gray-100 text-gray-700">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Estado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Prioridad</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Departamento</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Evidencia</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                {% for reporte in reportes %}
+                    <tr class="hover:bg-gray-100 transition-all">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ reporte.id }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            {% if reporte.obtener_estado == "asignado" %}
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-blue-200 text-blue-800">Asignado</span>
+                            {% elif reporte.obtener_estado == "resuelto" %}
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-200 text-green-800">Resuelto</span>
+                            {% elif reporte.obtener_estado == "atendiendo" %}
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-200 text-yellow-800">Atendiendo</span>
+                            {% elif reporte.obtener_estado == "postergado" %}
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-200 text-gray-800">Postergado</span>
+                            {% else %}
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-200 text-red-800">{{ reporte.obtener_estado|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {{ reporte.obtener_prioridad }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {{ reporte.obtener_departamento.nombre }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {% if reporte.obtener_evidencia %}
+                                <span class="text-green-600">{{ reporte.obtener_evidencia }}</span>
+                            {% elif reporte.obtener_estado == "atendiendo" %}
+                                <form action="{% url 'agregar_evidencia' reporte.id %}" method="post" class="inline">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="bg-yellow-400 text-gray-900 px-4 py-2 rounded-full shadow hover:bg-yellow-500 transition">
+                                        Agregar Evidencia
+                                    </button>
+                                </form>
+                            {% else %}
+                                <span class="text-red-600">Sin evidencia</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 flex space-x-2">
+                            {% if reporte.obtener_estado == "asignado" %}
+                                <form action="{% url 'postergar_reporte' reporte.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="bg-red-400 text-white px-4 py-2 rounded-full shadow hover:bg-red-500 transition">
+                                        Postergar
+                                    </button>
+                                </form>
+                            {% endif %}
+
+                            {% if reporte.obtener_estado in "asignado postergado" %}
+                                <form action="{% url 'resolver_reporte' reporte.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="bg-green-400 text-white px-4 py-2 rounded-full shadow hover:bg-green-500 transition">
+                                        Resolver
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">No hay reportes para este departamento.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

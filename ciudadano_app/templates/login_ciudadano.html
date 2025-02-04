@@ -1,34 +1,47 @@
 {% extends 'base.html' %}
 
-{% block title %}Login Ciudadano{% endblock %}
+{% block title %}Iniciar Sesión - Municipio de Quito{% endblock %}
 
 {% block content %}
-<div class="flex items-center justify-center">
-    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 class="text-2xl font-bold mb-6 text-center text-primario-DEFAULT">Iniciar Sesión como Ciudadano</h1>
-        <form method="POST">
-            {% csrf_token %}
-            <div class="mb-4">
-                <label for="correo_electronico" class="block text-gray-700 font-semibold mb-2">Correo Electrónico</label>
-                <input type="email" name="correo_electronico" id="correo_electronico"
-                       class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primario-DEFAULT"
-                       required>
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div class="w-full max-w-md">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <!-- Encabezado -->
+            <div class="bg-[#002F5F] px-6 py-4 border-b-4 border-t-0 border-l-0 border-r-0 border-solid" style="border-color: #D8A35C;">
+                <h2 class="text-white text-center text-2xl font-bold">Iniciar Sesión</h2>
             </div>
-            <div class="mb-6">
-                <label for="password" class="block text-gray-700 font-semibold mb-2">Contraseña</label>
-                <input type="password" name="password" id="password"
-                       class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-primario-DEFAULT"
-                       required>
+            <!-- Formulario -->
+            <form method="POST" class="px-6 py-8">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="correo_electronico" class="block text-gray-700 text-sm font-semibold mb-2">
+                        Correo Electrónico
+                    </label>
+                    <input type="email" name="correo_electronico" id="correo_electronico" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#002F5F]">
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">
+                        Contraseña
+                    </label>
+                    <input type="password" name="password" id="password" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#002F5F]">
+                </div>
+                <button type="submit"
+                        class="w-full bg-[#002F5F] hover:bg-[#001c3f] text-white font-semibold py-2 px-4 rounded transition duration-200">
+                    Iniciar Sesión
+                </button>
+            </form>
+            <!-- Pie de formulario -->
+            <div class="px-6 py-4 bg-gray-50">
+                <p class="text-center text-gray-600 text-sm">
+                    ¿No tienes una cuenta?
+                    <a href="{% url 'registro_ciudadano' %}" class="text-[#A6192E] hover:underline">
+                        Regístrate aquí
+                    </a>
+                </p>
             </div>
-            <button type="submit"
-                    class="w-full bg-primario-DEFAULT text-white py-2 px-4 rounded hover:bg-primario-light transition duration-200">
-                Iniciar Sesión
-            </button>
-        </form>
-        <p class="mt-4 text-center text-gray-600">
-            ¿No tienes una cuenta?
-            <a href="{% url 'registro_ciudadano' %}" class="text-primario-DEFAULT hover:text-primario-light">Regístrate aquí</a>
-        </p>
+        </div>
     </div>
 </div>
 {% endblock %}

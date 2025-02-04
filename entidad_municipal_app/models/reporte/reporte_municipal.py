@@ -16,6 +16,13 @@ class ReporteMunicipal(models.Model):
         "postergado"
     ]
 
+    TRANSICIONES_VALIDAS = {
+        "no_asignado": ["asignado"],
+        "asignado": ["atendiendo", "postergado"],
+        "atendiendo": ["resuelto"],
+        "postergado": ["atendiendo"],
+    }
+
     id = models.AutoField(primary_key=True)
     
     reporte_ciudadano = models.ForeignKey(
@@ -52,16 +59,20 @@ class ReporteMunicipal(models.Model):
         Cambia el estado del reporte municipal validando que sea un estado válido.
 
         Args:
-            nuevo_estado (str): Nuevo estado a establecer
+            nuevo_estado (str): Nuevo estado a establecer.
 
         Raises:
-            ValidationError: Si el estado no es válido
+            ValidationError: Si el estado no es válido o la transición no está permitida.
         """
         if nuevo_estado not in self.ESTADOS_VALIDOS:
-            raise ValidationError(
-                f"Estado '{nuevo_estado}' no válido. Estados permitidos: {self.ESTADOS_VALIDOS}"
-            )
-        self.estado = nuevo_estado
+            raise ValidationError(f"Estado '{nuevo_estado}' no es válido. Estados permitidos: {self.ESTADOS_VALIDOS}")
+
+        transiciones_permitidas = self.TRANSICIONES_VALIDAS.get(self.estado, [])
+
+        if nuevo_estado in transiciones_permitidas:
+            self.estado = nuevo_estado
+        else:
+            raise ValidationError(f"No se puede cambiar de '{self.estado}' a '{nuevo_estado}'.")
 
     def registrar_evidencia(self, descripcion_evidencia: str):
         """
@@ -71,7 +82,8 @@ class ReporteMunicipal(models.Model):
             descripcion_evidencia (str): Descripción de la evidencia
         """
         self.evidencia = descripcion_evidencia
-        self.estado = "resuelto"
+        self.cambiar_estado("resuelto")
+
 
     def obtener_departamento(self):
         return self.reporte_ciudadano.tipo_reporte.departamento

@@ -1,0 +1,76 @@
+<form action="{% url 'reaccionar' noticia.id %}" method="post" class="space-y-4 max-w-lg mx-auto">
+    {% csrf_token %}
+    <div class="flex justify-around">
+        <!-- Reacción: Me gusta -->
+        <label for="me_gusta_{{ noticia.id }}" class="flex flex-col items-center cursor-pointer">
+            <span id="me_gusta-count-{{noticia.id}}"></span>
+            <input type="radio" name="tipo_reaccion" value="me_gusta" id="me_gusta_{{ noticia.id }}" class="hidden peer">
+            <span class="text-2xl text-gray-600 peer-checked:text-blue-500 peer-checked:font-bold peer-checked:text-lg">
+                👍
+            </span>
+            <span class="text-sm text-gray-600 peer-checked:font-bold peer-checked:text-lg">Me gusta</span>
+        </label>
+
+        <!-- Reacción: Interesante -->
+        <label for="interesante_{{ noticia.id }}" class="flex flex-col items-center cursor-pointer">
+            <span id="interesante-count-{{noticia.id}}"></span>
+            <input type="radio" name="tipo_reaccion" value="interesante" id="interesante_{{ noticia.id }}" class="hidden peer">
+            <span class="text-2xl text-gray-600 peer-checked:text-green-500 peer-checked:font-bold peer-checked:text-lg">
+                🔥
+            </span>
+            <span class="text-sm text-gray-600 peer-checked:font-bold peer-checked:text-lg">Interesante</span>
+        </label>
+
+        <!-- Reacción: No me gusta -->
+        <label for="no_me_gusta_{{ noticia.id }}" class="flex flex-col items-center cursor-pointer">
+            <span id="no_me_gusta-count-{{noticia.id}}"></span>
+            <input type="radio" name="tipo_reaccion" value="no_me_gusta" id="no_me_gusta_{{ noticia.id }}" class="hidden peer">
+            <span class="text-2xl text-gray-600 peer-checked:text-red-500 peer-checked:font-bold peer-checked:text-lg">
+                👎
+            </span>
+            <span class="text-sm text-gray-600 peer-checked:font-bold peer-checked:text-lg">No me gusta</span>
+        </label>
+
+        <!-- Reacción: Gracioso -->
+        <label for="gracioso_{{ noticia.id }}" class="flex flex-col items-center cursor-pointer">
+            <span id="gracioso-count-{{noticia.id}}"></span>
+            <input type="radio" name="tipo_reaccion" value="gracioso" id="gracioso_{{ noticia.id }}" class="hidden peer">
+            <span class="text-2xl text-gray-600 peer-checked:text-yellow-500 peer-checked:font-bold peer-checked:text-lg">
+                😂
+            </span>
+            <span class="text-sm text-gray-600 peer-checked:font-bold peer-checked:text-lg">Gracioso</span>
+        </label>
+
+        <!-- Reacción: Triste -->
+        <label for="triste_{{ noticia.id }}" class="flex flex-col items-center cursor-pointer">
+            <span id="triste-count-{{noticia.id}}"></span>
+            <input type="radio" name="tipo_reaccion" value="triste" id="triste_{{ noticia.id }}" class="hidden peer">
+            <span class="text-2xl text-gray-600 peer-checked:text-indigo-500 peer-checked:font-bold peer-checked:text-lg">
+                😢
+            </span>
+            <span class="text-sm text-gray-600 peer-checked:font-bold peer-checked:text-lg">Triste</span>
+        </label>
+    </div>
+    <button type="submit" class="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+        Enviar
+    </button>
+</form>
+
+<script>
+    // Función para actualizar el conteo de reacciones mediante AJAX
+    function actualizarReacciones(noticiaId) {
+        fetch(`{% url 'conteo_reacciones' noticia.id %}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('me_gusta-count-'+noticiaId).textContent = data.reacciones.me_gusta;
+            document.getElementById('interesante-count-'+noticiaId).textContent = data.reacciones.interesante;
+            document.getElementById('no_me_gusta-count-'+noticiaId).textContent = data.reacciones.no_me_gusta;
+            document.getElementById('gracioso-count-'+noticiaId).textContent = data.reacciones.gracioso;
+            document.getElementById('triste-count-'+noticiaId).textContent = data.reacciones.triste;
+        })
+        .catch(error => console.error('Error al actualizar reacciones:', error));
+    }
+
+    // Llama a la función cuando la página se carga
+    document.addEventListener('DOMContentLoaded', actualizarReacciones({{noticia.id}}));
+</script>

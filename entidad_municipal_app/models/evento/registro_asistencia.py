@@ -158,17 +158,40 @@ class RegistroAsistencia(models.Model):
         
         Args:
             nuevo_estado: Nuevo estado a establecer.
-        
+            
         Raises:
-            ValidationError: Si el estado no es válido.
+            ValidationError: Si el estado no es válido o la transición no está permitida.
         """
         if nuevo_estado not in dict(self.ESTADOS_REGISTRO):
             raise ValidationError({
                 'estado_registro': f'Estado no válido: {nuevo_estado}'
             })
+
+        # Definir transiciones permitidas
+        transiciones_validas = {
+            self.ESTADO_INSCRITO: [self.ESTADO_EN_ESPERA, self.ESTADO_CANCELADO],
+            self.ESTADO_EN_ESPERA: [self.ESTADO_INSCRITO, self.ESTADO_CANCELADO],
+            self.ESTADO_CANCELADO: [],  # No se permite cambiar desde cancelado
+            self.ESTADO_ASISTIO: [],    # No se permite cambiar desde asistió
+            self.ESTADO_NO_ASISTIO: [], # No se permite cambiar desde no asistió
+        }
         
+        # Validar la transición
+        if nuevo_estado not in transiciones_validas.get(self.estado_registro, []):
+            raise ValidationError({
+                'estado_registro': f'No se permite cambiar de {self.estado_registro} a {nuevo_estado}'
+            })
+        
+        # Guardar el estado anterior para notificaciones
+        estado_anterior = self.estado_registro
+        
+        # Actualizar estado
         self.estado_registro = nuevo_estado
         self.save()
+        
+        # Si el cambio fue significativo, notificar al ciudadano
+        if estado_anterior != nuevo_estado:
+            self.evento._enviar_notificacion_inscripcion(self)
 
     def obtener_formato_fecha_inscripcion(self):
         """Retorna la fecha de inscripción en formato legible"""

@@ -5,7 +5,7 @@ Modelo principal de Ciudadano.
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from ciudadano_app.models.ciudadano.gestor_ciudadano import GestorCiudadano
-
+from django.utils.translation import gettext_lazy as _
 
 class Ciudadano(AbstractBaseUser):
     """
@@ -49,9 +49,30 @@ class Ciudadano(AbstractBaseUser):
         verbose_name="Fecha de Registro",
         help_text="Fecha y hora en que el ciudadano se registró en el sistema",
     )
-    
+
     is_active: models.BooleanField = models.BooleanField(default=True)
     is_admin: models.BooleanField = models.BooleanField(default=False)
+
+    sectores_de_interes = models.ManyToManyField(
+        'shared.Sector',
+        related_name="ciudadanos_interesados",
+        blank=True
+    )
+
+    ubicacion_actual = models.ForeignKey(
+        'shared.Sector',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="ciudadanos_presentes"
+    )
+
+    sector = models.ForeignKey(
+        'shared.Sector',
+        on_delete=models.SET_NULL,
+        null=True,
+        verbose_name=_("Sector")
+    )
 
     objects = GestorCiudadano()
 
@@ -78,7 +99,17 @@ class Ciudadano(AbstractBaseUser):
         """Retorna el número de identificación del ciudadano"""
         return self.numero_identificacion
 
-    def __str__(self):
+    def agregar_sector_de_interes(self, sector):
+        """Agrega un sector a la lista de sectores de interés del ciudadano."""
+        self.sectores_de_interes.add(sector)
+        self.save()
+
+    def actualizar_ubicacion(self, sector):
+        """Actualiza la ubicación actual del ciudadano."""
+        self.ubicacion_actual = sector
+        self.save()
+
+    def _str_(self):
         """Retorna una representación en cadena del ciudadano"""
         return f"Ciudadano: {self.nombre_completo} ({self.correo_electronico})"
     

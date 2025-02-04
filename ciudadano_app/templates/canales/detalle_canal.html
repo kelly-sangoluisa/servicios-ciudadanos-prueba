@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md p-6">
+    <!-- Título y descripción del canal -->
+    <h1 class="text-3xl font-bold text-primario-DEFAULT mb-4">{{ canal.nombre }}</h1>
+    <p class="text-gray-600 mb-6">{{ canal.descripcion }}</p>
+
+    <!-- Sección de suscripción -->
+    <div class="mb-6">
+        {% if esta_suscrito %}
+        <a href="{% url 'desuscribirse_canal' canal.id %}"
+           class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+            Desuscribirse
+        </a>
+        {% else %}
+        <a href="{% url 'suscribirse_canal' canal.id %}"
+           class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+            Suscribirse
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Noticias del canal -->
+    <div>
+        <h2 class="text-2xl font-semibold text-primario-DEFAULT mb-4">Noticias</h2>
+
+        <ul class="space-y-4">
+            {% for noticia in noticias %}
+            <li class="bg-white p-4 rounded-lg shadow max-w-lg mx-auto">
+                {% include 'canales/partials/noticia_detalle.html' %}
+                {% if esta_suscrito %}
+                {% include 'canales/partials/comentario_form.html' %}
+                {% endif %}
+            </li>
+            {% empty %}
+            <p class="text-gray-600 text-center">No hay noticias disponibles en este canal.</p>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

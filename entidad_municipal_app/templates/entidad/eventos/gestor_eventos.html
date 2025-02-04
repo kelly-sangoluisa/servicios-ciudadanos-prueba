@@ -29,7 +29,7 @@
           <td class="px-6 py-4 whitespace-nowrap">{{ evento.id }}</td>
           <td class="px-6 py-4 whitespace-nowrap">{{ evento.nombre_evento }}</td>
           <td class="px-6 py-4">
-            <div class="truncate max-w-xs" title="{{ eventoMunicipal.descripcion_evento }}">
+            <div class="truncate max-w-xs" title="{{ evento.descripcion_evento }}">
               {{ evento.descripcion_evento }}
             </div>
           </td>
@@ -50,11 +50,11 @@
             {{ evento.espacio_publico.nombre|default:"No asignado" }}
           </td>
           <td class="px-6 py-4 whitespace-nowrap space-x-2">
-            <a href="{% url 'evento' evento.id %}"
+            <a href="{% url 'detalle_evento' evento.id %}"
                class="text-blue-500 hover:text-blue-700 hover:underline">
               Ver
             </a>
-            <a href="{% url 'editar_evento' evento.id %}"
+           <a href="{% url 'editar_evento' evento.id %}"
                class="text-green-500 hover:text-green-700 hover:underline">
               Editar
             </a>

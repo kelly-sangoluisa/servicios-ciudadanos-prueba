@@ -1,0 +1,15 @@
+<div class="bg-gray-100 p-3 rounded-lg shadow-md max-w-lg mx-auto">
+    <h3 class="text-xl font-semibold text-primario-DEFAULT">{{ noticia.titulo }}</h3>
+    <p class="text-gray-500 mb-2">{{ noticia.fecha_publicacion}}</p>
+    <p class="text-gray-800 text-sm line-clamp-3">{{ noticia.contenido }}</p>
+
+    <!-- Imagen de la noticia (si existe) -->
+    {% if noticia.imagen %}
+    <img src="{{ noticia.imagen.url }}" alt="Imagen de {{ noticia.titulo }}" class="mb-2 w-auto h-48 rounded-lg mx-auto">
+    {% endif %}
+
+    <!-- Reacciones de la noticia -->
+    <div class="mt-4">
+        {% include 'canales/partials/reaccionar_form.html' %}
+    </div>
+</div>

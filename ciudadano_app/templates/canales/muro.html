@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-3xl font-semibold text-center my-6">Noticias recientes</h1>
+
+<ul class="space-y-6">
+    {% for noticia in noticias %}
+    <li class="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
+        {% include 'canales/partials/noticia_detalle.html' %}
+        
+        {% include 'canales/partials/comentario_form.html' %}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

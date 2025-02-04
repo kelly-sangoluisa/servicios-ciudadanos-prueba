@@ -2,6 +2,10 @@ from django.db import models
 from ciudadano_app.models.ciudadano.ciudadano import Ciudadano
 from django.utils.timezone import now
 
+from entidad_municipal_app.models import EntidadMunicipal
+from shared.models.notificacion.notificacion import Notificacion
+
+
 class CanalInformativo(models.Model):
     """
     Representa un canal general de noticias o información.
@@ -15,6 +19,7 @@ class CanalInformativo(models.Model):
         descripcion (str): Una descripción del canal.
         es_emergencia (bool): Indicador de si el canal es de emergencia. Por defecto es False.
     """
+    entidad_municipal = models.ForeignKey(EntidadMunicipal, on_delete=models.CASCADE, related_name="canales", null=True)
     nombre = models.CharField(max_length=255, unique=True)
     descripcion = models.TextField()
     es_emergencia = models.BooleanField(default=False)
@@ -78,23 +83,38 @@ class CanalInformativo(models.Model):
         """
         if self.es_emergencia:
             raise ValueError("Utiliza notificar_alerta_emergencia para enviar alertas de emergencia.")
-        suscriptores = Suscripcion.objects.filter(canal=self).select_related('ciudadano')
+        suscripciones = Suscripcion.objects.filter(canal=self)
+        for suscripcion in suscripciones.ciudadano:
+            Notificacion.objects.create(
+                ciudadano=suscripcion.ciudadano,
+                titulo=noticia.titulo,
+                mensaje=noticia.contenido
+            )
 
     def notificar_alerta_emergencia(self, tipo_incidente, localidad):
         """
-        Envía una alerta de emergencia solo a los ciudadanos de una localidad específica.
+    Envía una alerta de emergencia solo a los ciudadanos de una localidad específica.
 
-        Este método solo puede ser utilizado en canales de emergencia.
+    Este método solo puede ser utilizado en canales de emergencia.
 
-        Args:
-            tipo_incidente (str): El tipo de incidente (ej. "Incendio", "Accidente").
-            localidad (str): La localidad donde ocurrió el incidente.
+    Args:
+        tipo_incidente (str): El tipo de incidente (ej. "Incendio", "Accidente").
+        localidad (str): La localidad donde ocurrió el incidente.
 
-        Raises:
-            ValueError: Si el canal no es de emergencia.
-        """
+    Raises:
+        ValueError: Si el canal no es de emergencia.
+    """
         if not self.es_emergencia:
             raise ValueError("Este método solo es válido para canales de emergencia.")
+
+        suscripciones = Suscripcion.objects.filter(canal=self)
+        for suscripcion in suscripciones:
+            Notificacion.objects.create(
+                ciudadano=suscripcion.ciudadano,
+                titulo="Alerta de emergencia",
+                mensaje=f"Ha ocurrido un {tipo_incidente} en {localidad}"
+            )
+
 
 class Suscripcion(models.Model):
     """

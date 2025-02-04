@@ -227,6 +227,50 @@ class EventoMunicipal(models.Model):
         """Retorna la fecha del evento en formato legible"""
         return self.fecha_realizacion.strftime("%d/%m/%Y %H:%M")
 
+    def obtener_todos_registros(self):
+        """
+        Obtiene todos los registros de asistencia del evento.
+
+        Returns:
+            QuerySet: QuerySet de RegistroAsistencia con todos los estados
+        """
+        return self.registroasistencia_set.all().select_related('ciudadano')
+
+    @transaction.atomic
+    def actualizar_estado_asistencia(self, registro_id, nuevo_estado):
+        """
+        Actualiza el estado de asistencia de un registro.
+
+        Args:
+            registro_id: ID del registro a actualizar
+            nuevo_estado: Nuevo estado a asignar
+
+        Returns:
+            RegistroAsistencia: Registro actualizado
+
+        Raises:
+            ErrorGestionEventos: Si hay problemas con la actualización
+        """
+        try:
+            registro = self.registroasistencia_set.select_for_update().get(id=registro_id)
+            estados_validos = [
+                self.ESTADO_INSCRITO,
+                self.ESTADO_EN_ESPERA,
+                self.ESTADO_ASISTIO,
+                self.ESTADO_NO_ASISTIO,
+                self.ESTADO_CANCELADO_REGISTRO
+            ]
+            
+            if nuevo_estado not in estados_validos:
+                raise ErrorGestionEventos(f"Estado no válido: {nuevo_estado}")
+                
+            registro.estado_registro = nuevo_estado
+            registro.save()
+            return registro
+            
+        except RegistroAsistencia.DoesNotExist:
+            raise ErrorGestionEventos("Registro de asistencia no encontrado")
+
     def save(self, *args, **kwargs):
         # Si el evento tiene un espacio público asociado, actualiza el lugar_evento
         if self.espacio_publico:

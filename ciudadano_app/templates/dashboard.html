@@ -25,6 +25,27 @@
             <h2 class="text-xl font-semibold mb-4">Eventos</h2>
             <a href="{% url 'lista_eventos' %}" class="btn btn-secundario">Ver lista de eventos</a>
         </div>
+
+        <!-- Sección de canales -->
+        <div class="bg-neutral-gris p-6 rounded-lg">
+            <h2 class="text-xl font-semibold mb-4">Canales</h2>
+            <div class="space-y-4">
+                <a href="{% url 'lista_canales' %}"
+                   class="text-secundario-DEFAULT hover:text-secundario-dark text-sm">
+                    Ver Canales →
+                </a>
+            </div>
+            <div class="space-y-4">
+                <a href="{% url 'ver_noticias' %}"
+                   class="text-secundario-DEFAULT hover:text-secundario-dark text-sm">
+                    Ver Muro →
+                </a>
+            </div>
+            <div class="space-y-4">
+                <a href="{% url 'ver_notificaciones' %}"
+                   class="text-secundario-DEFAULT hover:text-secundario-dark text-sm">
+                    Ver Notificaciones →
+                </a>
+            </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}

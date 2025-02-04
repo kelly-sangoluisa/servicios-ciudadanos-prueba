@@ -60,11 +60,10 @@ def crear_datos_prueba():
 
     # Crear espacios públicos de prueba (2 disponibles y 2 no disponibles)
     espacios_publicos_data = [
-        {"nombre": "Parque Central", "direccion": "Calle Principal 456", "estado_espacio_publico": EspacioPublico.ESTADO_DISPONIBLE, "estado_incidente_espacio": EspacioPublico.NO_AFECTADO},
-        {"nombre": "Plaza Mayor", "direccion": "Avenida Libertad 789", "estado_espacio_publico": EspacioPublico.ESTADO_DISPONIBLE, "estado_incidente_espacio": EspacioPublico.NO_AFECTADO},
-        {"nombre": "San Francisco", "direccion": "Avenida 24","estado_espacio_publico": EspacioPublico.ESTADO_DISPONIBLE,"estado_incidente_espacio": EspacioPublico.AFECTADO},
-        {"nombre": "Centro Cultural", "direccion": "Calle Cultura 101", "estado_espacio_publico": EspacioPublico.ESTADO_NO_DISPONIBLE, "estado_incidente_espacio": EspacioPublico.NO_AFECTADO},
-        {"nombre": "Estadio Municipal", "direccion": "Avenida Deportes 202", "estado_espacio_publico": EspacioPublico.ESTADO_NO_DISPONIBLE, "estado_incidente_espacio": EspacioPublico.NO_AFECTADO},
+        {"nombre": "Parque Central", "direccion": "Calle Principal 456", "estado_espacio_publico": EspacioPublico.ESTADO_DISPONIBLE, "estado_incidente_espacio": EspacioPublico.NO_AFECTADO, "descripcion": "Un hermoso parque central"},
+        {"nombre": "Plaza Mayor", "direccion": "Avenida Libertad 789", "estado_espacio_publico": EspacioPublico.ESTADO_DISPONIBLE, "estado_incidente_espacio": EspacioPublico.NO_AFECTADO, "descripcion": "Una plaza principal en el centro"},
+        {"nombre": "Centro Cultural", "direccion": "Calle Cultura 101", "estado_espacio_publico": EspacioPublico.ESTADO_NO_DISPONIBLE, "estado_incidente_espacio": EspacioPublico.NO_AFECTADO, "descripcion": "Centro para actividades culturales"},
+        {"nombre": "Estadio Municipal", "direccion": "Avenida Deportes 202", "estado_espacio_publico": EspacioPublico.ESTADO_NO_DISPONIBLE, "estado_incidente_espacio": EspacioPublico.NO_AFECTADO, "descripcion": "Estadio principal para eventos deportivos"},
     ]
 
     espacios_publicos = []
@@ -74,6 +73,7 @@ def crear_datos_prueba():
             defaults={
                 "entidad_municipal": entidad_municipal,
                 "direccion": data["direccion"],
+                "descripcion": data["descripcion"],
                 "estado_espacio_publico": data["estado_espacio_publico"],
                 "estado_incidente_espacio": data["estado_incidente_espacio"]
             }

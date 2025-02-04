@@ -1,3 +1,5 @@
+from threading import Lock
+
 from faker import Faker
 from entidad_municipal_app.models.departamento.departamento import Departamento
 from entidad_municipal_app.models.departamento.repositorio_departamento import RepositorioDepartamento
@@ -5,17 +7,32 @@ from entidad_municipal_app.models.departamento.repositorio_departamento import R
 
 class RepositorioDeDepartamentoEnMemoria(RepositorioDepartamento):
     """
-    Implementación de un repositorio que almacena departamentos en memoria para pruebas.
+    Implementación de un repositorio que almacena departamentos en memoria como Singleton.
     """
+
+    _instance = None
+    _lock = Lock()  # Thread safety for Singleton
+
+    def __new__(cls, *args, **kwargs):
+        """
+        Implementación Singleton: Garantiza que solo haya una instancia del repositorio.
+        """
+        with cls._lock:  # Evita problemas de concurrencia
+            if cls._instance is None:
+                cls._instance = super().__new__(cls)
+                cls._instance.__initialized = False  # Flag para evitar re-inicialización
+        return cls._instance
 
     def __init__(self):
         """
-        Inicializa el repositorio en memoria con algunos departamentos de prueba generados con Faker.
+        Inicializa el repositorio con algunos departamentos de prueba generados con Faker (solo una vez).
         """
-        self.departamentos = {}
-        self.fake = Faker('es_ES')
-        self.next_id = 1  # Variable para asignar IDs únicos en memoria
-        self._generar_departamentos_prueba()
+        if not self.__initialized:
+            self.__initialized = True  # Marcar como inicializado
+            self.departamentos = {}
+            self.fake = Faker('es_ES')
+            self.next_id = 1  # Variable para asignar IDs únicos en memoria
+            self._generar_departamentos_prueba()  # Generar datos de prueba
 
     def _generar_departamentos_prueba(self):
         """

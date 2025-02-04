@@ -1,0 +1,55 @@
+<div class="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Crear Nueva Noticia</h2>
+
+    <form action="{% url 'crear_noticia' canal.id %}" method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+
+        <!-- Campo: Título de la Noticia -->
+        <div>
+            <label for="titulo" class="block text-gray-700 font-bold mb-2">Título</label>
+            <input
+                type="text"
+                name="titulo"
+                id="titulo"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                placeholder="Ingrese el título de la noticia"
+                required
+            >
+        </div>
+
+        <!-- Campo: Contenido -->
+        <div>
+            <label for="contenido" class="block text-gray-700 font-bold mb-2">Contenido</label>
+            <textarea
+                name="contenido"
+                id="contenido"
+                rows="5"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                placeholder="Ingrese el contenido de la noticia"
+                required
+            ></textarea>
+        </div>
+
+        <!-- Campo: Imagen -->
+        <div>
+            <label for="imagen" class="block text-gray-700 font-bold mb-2">Imagen</label>
+            <input
+                type="file"
+                name="imagen"
+                id="imagen"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                accept="image/*"
+            >
+        </div>
+
+        <!-- Botón de Envío -->
+        <div class="flex justify-end">
+            <button
+                type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
+            >
+                Crear Noticia
+            </button>
+        </div>
+    </form>
+</div>

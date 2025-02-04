@@ -1,94 +1,94 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Servicios Ciudadanos{% endblock %}</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primario: {
-                            light: '#4B83BF',
-                            DEFAULT: '#143D69',
-                            dark: '#0A1F35',
-                        },
-                        secundario: {
-                            light: '#FFB74D',
-                            DEFAULT: '#FF9800',
-                            dark: '#F57C00',
-                        },
-                        neutral: {
-                            white: '#FFFFFF',
-                            gris: '#F5F5F5',
-                            negro: '#333333',
-                        }
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Servicios Ciudadanos{% endblock %}</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primario: {
+              light: '#4B83BF',
+              DEFAULT: '#143D69',
+              dark: '#0A1F35',
+            },
+            secundario: {
+              light: '#FFB74D',
+              DEFAULT: '#FF9800',
+              dark: '#F57C00',
+            },
+            neutral: {
+              white: '#FFFFFF',
+              gris: '#F5F5F5',
+              negro: '#333333',
             }
+          }
         }
-    </script>
-    {% block extra_css %}{% endblock %}
+      }
+    }
+  </script>
+  {% block extra_css %}{% endblock %}
 </head>
 <body class="bg-neutral-gris min-h-screen flex flex-col">
-    <!-- Header -->
-    <header class="bg-primario-DEFAULT text-white shadow-md">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <a href="{% url 'landing_page' %}" class="text-2xl font-bold">Servicios Ciudadanos</a>
-            <nav class="flex items-center">
-                {% if user.is_authenticated %}
-                    {% if user.es_ciudadano %}
-                        <a href="{% url 'dashboard_ciudadano' %}" class="px-4 py-2 hover:text-secundario-light">Dashboard</a>
-                    {% else %}
-                        <a href="{% url 'dashboard_entidad' %}" class="px-4 py-2 hover:text-secundario-light">Dashboard</a>
-                    {% endif %}
-                    <form action="{% url 'logout_usuario' %}" method="post" class="inline">
-                        {% csrf_token %}
-                        <button type="submit" class="bg-secundario-DEFAULT px-4 py-2 rounded hover:bg-secundario-dark">Cerrar Sesión</button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'login_ciudadano' %}" class="px-4 py-2 hover:text-secundario-light">Ciudadano</a>
-                    <a href="{% url 'login_entidad' %}" class="px-4 py-2 hover:text-secundario-light">Entidad Municipal</a>
-                {% endif %}
-            </nav>
-        </div>
-    </header>
-
-    <!-- Mensajes -->
-    {% if messages %}
-    <div class="container mx-auto px-4 mt-4">
-        {% for message in messages %}
-        <div class="p-4 mb-4 rounded {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
-            {{ message }}
-        </div>
-        {% endfor %}
+  <!-- Header -->
+  <header class="bg-primario text-white">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="{% url 'landing_page' %}" class="text-2xl font-bold">Servicios Ciudadanos</a>
+      <nav class="flex items-center">
+        {% if user.is_authenticated %}
+          {% if user.es_ciudadano %}
+            <a href="{% url 'dashboard_ciudadano' %}" class="px-4 py-2 hover:text-secundario-light">Dashboard</a>
+          {% else %}
+            <a href="{% url 'dashboard_entidad' %}" class="px-4 py-2 hover:text-secundario-light">Dashboard</a>
+          {% endif %}
+          <form action="{% url 'logout_usuario' %}" method="post" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="bg-secundario px-4 py-2 rounded hover:bg-secundario-dark">
+              Cerrar Sesión
+            </button>
+          </form>
+        {% else %}
+          <a href="{% url 'login_ciudadano' %}" class="px-4 py-2 hover:text-secundario-light">Ciudadano</a>
+          <a href="{% url 'login_entidad' %}" class="px-4 py-2 hover:text-secundario-light">Entidad Municipal</a>
+        {% endif %}
+      </nav>
     </div>
-    {% endif %}
+  </header>
 
-    <!-- Contenido principal -->
-    <main class="flex-grow container mx-auto px-4 py-8">
-        {% block content %}{% endblock %}
-    </main>
+  <!-- Mensajes -->
+  {% if messages %}
+  <div class="container mx-auto px-4 mt-4">
+    {% for message in messages %}
+      <div class="p-4 mb-4 rounded {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
 
-    <!-- Footer -->
-    <footer class="bg-primario-dark text-white py-6">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p>&copy; 2025 Servicios Ciudadanos. Todos los derechos reservados.</p>
-                </div>
-                <div>
-                    <a href="#" class="hover:text-secundario-light mx-2">Términos y Condiciones</a>
-                    <a href="#" class="hover:text-secundario-light mx-2">Privacidad</a>
-                    <a href="#" class="hover:text-secundario-light mx-2">Contacto</a>
-                </div>
-            </div>
+  <!-- Contenido principal -->
+  <main class="flex-grow container mx-auto px-4 py-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-primario-dark text-white py-6">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center">
+        <p class="text-sm">&copy; 2025 Servicios Ciudadanos. Todos los derechos reservados.</p>
+        <div class="mt-2 sm:mt-0">
+          <a href="#" class="mx-2 text-sm hover:text-secundario-light">Términos y Condiciones</a>
+          <a href="#" class="mx-2 text-sm hover:text-secundario-light">Privacidad</a>
+          <a href="#" class="mx-2 text-sm hover:text-secundario-light">Contacto</a>
         </div>
-    </footer>
+      </div>
+    </div>
+  </footer>
 
-    {% block extra_js %}{% endblock %}
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

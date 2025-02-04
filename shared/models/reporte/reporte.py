@@ -1,7 +1,7 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 # Importación de modelos necesarios desde la aplicación 'ciudadano_app'.
-from ciudadano_app.models import Ciudadano
 from .tipo_reporte import TipoReporte
 
 class Reporte(models.Model):
@@ -10,7 +10,11 @@ class Reporte(models.Model):
     """
 
     # Relación con el modelo Ciudadano; se elimina el reporte si el ciudadano se elimina.
-    ciudadano = models.ForeignKey(Ciudadano, on_delete=models.CASCADE)
+    ciudadano = models.ForeignKey(
+        'ciudadano_app.Ciudadano',  # Referencia como string
+        on_delete=models.CASCADE,
+        verbose_name=_("Ciudadano")
+    )
 
     # Relación con el modelo TipoReporte; se elimina el reporte si el tipo de reporte se elimina.
     tipo_reporte = models.ForeignKey(TipoReporte, on_delete=models.CASCADE)
@@ -30,7 +34,7 @@ class Reporte(models.Model):
         """
         return bool(self.ciudadano and self.tipo_reporte and self.ubicacion)
 
-    def __str__(self):
+    def _str_(self):
         """
         Método para obtener la representación en cadena del reporte, mostrando información relevante.
 
@@ -38,3 +42,7 @@ class Reporte(models.Model):
             str: Cadena que representa el reporte, incluyendo el asunto y el nombre del ciudadano.
         """
         return f"Reporte de {self.tipo_reporte.asunto} por {self.ciudadano.nombre_completo}"
+
+    def algun_metodo(self):
+        from ciudadano_app.models import Ciudadano
+        # usar Ciudadano aquí

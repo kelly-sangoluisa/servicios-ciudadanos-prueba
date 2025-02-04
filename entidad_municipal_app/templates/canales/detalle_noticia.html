@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="flex justify-end mb-4">
+        <a href="{% url 'eliminar_noticia' noticia.id %}"
+           class="text-red-500 hover:text-red-700 font-semibold">
+            Eliminar Noticia
+        </a>
+    </div>
+
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-2xl font-semibold text-primario-DEFAULT text-center mb-3">{{ noticia.titulo }}</h3>
+    <p class="text-sm text-gray-500 text-center mb-4">{{ noticia.fecha_publicacion }}</p>
+
+    <!-- Imagen de la noticia (si existe) -->
+    {% if noticia.imagen %}
+    <img src="{{ noticia.imagen.url }}" alt="Imagen de la noticia"
+         class="w-auto h-70 mx-auto object-cover rounded-lg shadow mb-4">
+    {% endif %}
+
+    <!-- Contenido -->
+    <p class="text-gray-800 text-justify leading-relaxed mb-6">{{ noticia.contenido }}</p>
+
+    <!-- Sección de Reacciones -->
+    <div class="bg-gray-100 p-4 rounded-lg shadow-md mb-6 mx-auto">
+        <h4 class="text-lg font-semibold mb-2 text-center">Reacciones</h4>
+        <div class="flex justify-between items-center text-gray-700 text-sm">
+            <div class="flex items-center space-x-4 mx-auto">
+                <span>👍 {{ reacciones.me_gusta }}</span>
+                <span>🔥 {{ reacciones.interesante }}</span>
+                <span>👎 {{ reacciones.no_me_gusta }}</span>
+                <span>😂 {{ reacciones.gracioso }}</span>
+                <span>😢 {{ reacciones.triste }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Comentarios -->
+    <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+        <h4 class="text-lg font-semibold mb-3 ">Comentarios</h4>
+        {% if comentarios %}
+        <ul class="space-y-3">
+            {% for comentario in comentarios %}
+            <li class="bg-white p-3 rounded-md shadow">
+                <p class="font-bold text-gray-800">{{ comentario.ciudadano.nombre_completo }}:</p>
+                <p class="text-sm text-gray-500">{{ comentario.fecha }}</p>
+                <p class="text-gray-700">{{ comentario.contenido }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-gray-500 text-center">No hay comentarios aún.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

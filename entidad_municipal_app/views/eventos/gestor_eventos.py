@@ -8,5 +8,5 @@ def gestor_eventos(request):
     """Vista para listar todos los eventos activos."""
     # Filtrar eventos por la entidad municipal del usuario autenticado
     entidad_municipal = request.user
-    eventos = EventoMunicipal.objects.filter(entidad_municipal=entidad_municipal).order_by('id')
+    eventos = EventoMunicipal.objects.filter(entidad_municipal=entidad_municipal)
     return render(request, 'entidad/eventos/gestor_eventos.html', {'eventos': eventos})

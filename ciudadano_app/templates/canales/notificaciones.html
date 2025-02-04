@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Notificaciones{% endblock %}
+
+{% block content %}
+{% for notificacion in notificaciones %}
+<div class="bg-gray-100 p-3 rounded-lg shadow-md max-w-lg mx-auto">
+    <h3 class="text-xl font-semibold text-primario-DEFAULT">{{ notificacion.titulo }}</h3>
+    <p class="text-gray-500 mb-2">{{ notificacion.mensaje}}</p>
+</div>
+{% endfor %}
+{% endblock %}

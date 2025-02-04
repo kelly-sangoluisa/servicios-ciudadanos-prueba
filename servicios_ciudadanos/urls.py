@@ -17,4 +17,6 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path('ciudadano/', include('ciudadano_app.urls'), name='ciudadano'),
     path('entidad_municipal/', include('entidad_municipal_app.urls'), name='entidad_municipal'),
-        ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,12 +1,15 @@
 from behave import given, when, then
 from faker import Faker
 from ciudadano_app.models import Ciudadano
+from entidad_municipal_app.models import EntidadMunicipal
 from entidad_municipal_app.models.canales.canal_informativo import CanalInformativo, Suscripcion
 from entidad_municipal_app.models.canales.noticia import Noticia
 from entidad_municipal_app.models.canales.reaccion import Reaccion
 from entidad_municipal_app.models.canales.comentario import Comentario
 import string
 import secrets
+
+from shared.models.notificacion.notificacion import Notificacion
 
 fake = Faker()
 
@@ -25,8 +28,14 @@ def crear_ciudadano():
     )
 
 def crear_canal(nombre, es_emergencia=False):
+    """Crea una entidad para asociarla al canal"""
+    entidad = EntidadMunicipal.objects.create_user(
+        correo_electronico= fake.email(),
+        password=generate_random_string(7)
+    )
     """Crea y retorna un canal informativo o de emergencia."""
     canal, _ = CanalInformativo.objects.get_or_create(
+        entidad_municipal = entidad,
         nombre=nombre,
         descripcion="Canal de noticias" if not es_emergencia else "Canal de emergencias",
         es_emergencia=es_emergencia
@@ -139,4 +148,5 @@ def step_impl(context, incidente, ciudad):
 @then('el sistema envía alertas rápidas a los ciudadanos de "{ciudad}".')
 def step_impl(context, ciudad):
     """Verifica que las alertas de emergencia han sido enviadas."""
-    context.canal_emergencia.notificar_alerta_emergencia(context.incidente, ciudad)
+    context.canal_emergencia.notificar_alerta_emergencia(context.incidente, context.ciudad)
+    assert Notificacion.objects.filter(titulo = "Alerta de emergencia").exists(), 'No se han eviado alertas de emergencia'

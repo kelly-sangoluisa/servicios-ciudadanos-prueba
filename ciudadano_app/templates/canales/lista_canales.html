@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-2xl font-bold text-primario-DEFAULT mb-4">Canales Informativos</h1>
+
+{% if canales %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for canal in canales %}
+            <div class="bg-gray-200 p-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold text-primario-DEFAULT">{{ canal.nombre }}</h2>
+                <p class="text-gray-600">{{ canal.descripcion }}</p>
+                <a href="{% url 'detalle_canal' canal.id %}" class="text-secundario-DEFAULT hover:text-secundario-dark text-sm mt-2 inline-block">
+                    Ver Canal →
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-gray-600">No hay canales disponibles en este momento.</p>
+{% endif %}
+{% endblock %}

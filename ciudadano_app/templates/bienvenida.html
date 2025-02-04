@@ -1,58 +1,56 @@
 {% extends 'base.html' %}
 
-{% block title %}Bienvenida - Entidad Municipal{% endblock %}
+{% block title %}Bienvenido(a) - Municipio de Quito{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-100">
-  <!-- Barra de navegación -->
-  <nav class="bg-[#143D69] text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
-          <span class="font-bold text-xl">Panel de Entidad Municipal</span>
-        </div>
-        <div class="flex items-center">
-          <a href="{% url 'logout_ciudadano' %}" class="bg-red-600 px-4 py-2 rounded hover:bg-red-500 text-sm font-medium">
-            Cerrar Sesión
-          </a>
+<div class="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full bg-white shadow-2xl rounded-2xl overflow-hidden border-t-8 border-[#143D69]">
+    <div class="p-8 text-center">
+      <div class="mb-6 flex justify-center">
+        <div class="bg-[#E6F0FA] rounded-full p-4 inline-block">
+          <i data-feather="shield" class="text-[#143D69] w-16 h-16"></i>
         </div>
       </div>
-    </div>
-  </nav>
+      <h1 class="text-3xl font-extrabold text-[#143D69] mb-4">
+        Servicios Ciudadanos
+      </h1>
+      <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+        Bienvenido(a) al portal de servicios del Municipio de Quito. Gestiona eventos, trámites y más.
+      </p>
 
-  <!-- Contenido principal -->
-  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-    <div class="px-4 py-6 sm:px-0">
-      <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="px-4 py-5 sm:p-6">
-          <h1 class="text-2xl font-bold text-gray-900 mb-4">
-            ¡Bienvenido(a) {{ request.user.nombre_entidad }}!
-          </h1>
-          <p class="text-gray-600">
-            Desde aquí puedes gestionar tus eventos municipales y otras funcionalidades administrativas.
-          </p>
+      <button onclick="window.location.href='{% url 'dashboard_ciudadano' %}'" class="w-full px-6 py-3 bg-[#9D2235] text-white rounded-lg text-lg hover:bg-opacity-90 transition duration-300 flex items-center justify-center space-x-2">
+        <i data-feather="arrow-right" class="w-5 h-5"></i>
+        <span>Acceder al Panel</span>
+      </button>
 
-          <!-- Menú de acciones rápidas -->
-          <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <a href="{% url 'lista_eventos' %}" class="bg-white overflow-hidden shadow rounded-lg p-6 hover:bg-gray-50">
-              <div class="flex items-center">
-                <div class="flex-shrink-0 bg-[#143D69] rounded-md p-3">
-                  <!-- Aquí podrías poner un ícono -->
-                </div>
-                <div class="ml-4">
-                  <h3 class="text-lg font-medium text-gray-900">Gestionar Eventos</h3>
-                  <p class="mt-1 text-sm text-gray-500">
-                    Ver y administrar eventos municipales
-                  </p>
-                </div>
-              </div>
-            </a>
-
-            <!-- Puedes agregar más tarjetas de acciones aquí -->
-          </div>
-        </div>
+      <div class="text-sm text-gray-600 mt-4 flex items-center justify-center space-x-2">
+        <i data-feather="lock" class="w-4 h-4 text-[#2E6F4E]"></i>
+        <span>Plataforma segura y confiable</span>
       </div>
     </div>
-  </main>
+
+    <div class="bg-[#F0F4F8] p-4 text-center">
+      <div class="flex justify-center space-x-6">
+        <a href="#" class="text-[#143D69] hover:text-opacity-80">
+          <i data-feather="help-circle" class="w-6 h-6"></i>
+        </a>
+        <a href="#" class="text-[#143D69] hover:text-opacity-80">
+          <i data-feather="phone" class="w-6 h-6"></i>
+        </a>
+        <a href="#" class="text-[#143D69] hover:text-opacity-80">
+          <i data-feather="mail" class="w-6 h-6"></i>
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script 
+    src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" 
+    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" 
+    crossorigin="anonymous">
+</script>
+<script>
+  feather.replace();
+</script>
 {% endblock %}

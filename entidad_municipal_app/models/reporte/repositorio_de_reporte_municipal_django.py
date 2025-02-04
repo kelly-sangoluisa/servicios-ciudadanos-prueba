@@ -35,9 +35,10 @@ class RepositorioDeReporteMunicipalDjango(RepositorioDeReporteMunicipal):
         """
         Crea un nuevo reporte municipal usando Django ORM.
         """
-        reporte_municipal = ReporteMunicipal(
+        reporte_municipal = ReporteMunicipal.objects.create(
             reporte_ciudadano=reporte_ciudadano,
-            estado="no_asignado"
+            estado="asignado",
+            evidencia=None
         )
         reporte_municipal.save()
         return reporte_municipal

@@ -2,7 +2,11 @@
 Modelos de la aplicación de entidad municipal.
 """
 
+# Primero los modelos base
 from .EntidadMunicipal import EntidadMunicipal
+from .departamento.departamento import Departamento
+
+# Luego los modelos que dependen de los anteriores
 from .espacio_publico import EspacioPublico
 from .evento.evento_municipal import EventoMunicipal
 from .evento.registro_asistencia import RegistroAsistencia
@@ -11,9 +15,8 @@ from .canales.noticia import Noticia
 from .canales.reaccion import Reaccion
 from .canales.comentario import Comentario
 from .reporte.reporte_municipal import ReporteMunicipal
-from .departamento.departamento import Departamento
 
-__all__ = [
+_all_ = [
     'EntidadMunicipal',
     'EventoMunicipal',
     'RegistroAsistencia',
